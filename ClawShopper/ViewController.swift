@@ -15,6 +15,8 @@ import SceneKit
 class ViewController: UIViewController, ARSessionDelegate {
     var configuration = ARWorldTrackingConfiguration()
     
+    var sceneIndex = 1
+    
     @IBOutlet var arView: ARView!
     
     var isWatermellonAdded: Bool!
@@ -26,6 +28,7 @@ class ViewController: UIViewController, ARSessionDelegate {
     
     var entryAnchor: Supermarket.Enter!
     var shelfAnchor: Supermarket.Scene!
+    var checkoutAnchor: Supermarket.CheckOut!
 
     
     var cart: Entity!
@@ -91,16 +94,25 @@ class ViewController: UIViewController, ARSessionDelegate {
     // function for handling tapping actions
     @objc
     func handleTap(recognizer: UITapGestureRecognizer) {
-        entryAnchor.notifications.switchScene.post()
-        isShopEntered = true
-        arView.scene.anchors.append(shelfAnchor)
+        if sceneIndex == 1 {
+            entryAnchor.notifications.switchScene.post()
+            isShopEntered = true
+            arView.scene.anchors.append(shelfAnchor)
+            arView.scene.anchors.append(entryAnchor)
+        } else if sceneIndex == 2 {
+            shelfAnchor.notifications.checkOut.post()
+            arView.scene.anchors.append(checkoutAnchor)
+            arView.scene.anchors.remove(shelfAnchor)
+        }
+        
+        sceneIndex += 1
     }
     
     func setupARView() {
         arView.automaticallyConfigureSession = false
         //let configuration = ARWorldTrackingConfiguration()
         configuration.planeDetection = [.horizontal, .vertical]
-        configuration.environmentTexturing = .automatic
+        //configuration.environmentTexturing = .automatic
         //arView.session.run(configuration)
     }
     
@@ -150,6 +162,7 @@ class ViewController: UIViewController, ARSessionDelegate {
         // Load the "Box" scene from the "Experience" Reality File
         entryAnchor = try! Supermarket.loadEnter()
         shelfAnchor = try! Supermarket.loadScene()
+        checkoutAnchor = try! Supermarket.loadCheckOut()
         
         arView.scene.anchors.append(entryAnchor)
         
@@ -384,7 +397,9 @@ class ViewController: UIViewController, ARSessionDelegate {
             let diffMiddleC = diffXMiddleC + diffYMiddleC
             
 
-            print("difference middle: \(diffMiddleW)")
+            print("difference watermellon: \(diffMiddleW)")
+            print("difference pizza: \(diffMiddleP)")
+            print("difference cookie: \(diffMiddleC)")
             
             if (diffMiddleW < 0.4) && !isWatermellonAdded && isShopEntered {
                 //print("condition met")
