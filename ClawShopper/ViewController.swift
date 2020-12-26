@@ -348,7 +348,7 @@ class ViewController: UIViewController, ARSessionDelegate {
             if (diffMiddle < 0.4) && !isWatermellonAdded && isShopEntered {
                 print("condition met")
                 isWatermellonAdded = true
-                shelfAnchor.notifications.hide.post()
+                shelfAnchor.notifications.hideWaterMellon.post()
                 cameraAnchor.addChild(waterMellon)
                 waterMellon.transform.translation = [0, -0.3, -2]
             }
