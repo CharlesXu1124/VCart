@@ -43,6 +43,9 @@ class ViewController: UIViewController, ARSessionDelegate {
     var waterMellon: Entity!
     var waterMellonPosition: SIMD3<Float>!
     
+    var waterMellonCheckout: Entity!
+    
+    
     var pizza: Entity!
     var pizzaPosition: SIMD3<Float>!
     
@@ -101,14 +104,17 @@ class ViewController: UIViewController, ARSessionDelegate {
     @objc
     func handleTap(recognizer: UITapGestureRecognizer) {
         if sceneIndex == 1 {
-            entryAnchor.notifications.switchScene.post()
             isShopEntered = true
+            entryAnchor.notifications.switchScene.post()
             arView.scene.anchors.append(shelfAnchor)
-            arView.scene.anchors.append(entryAnchor)
+            //arView.scene.anchors.remove(entryAnchor)
         } else if sceneIndex == 2 {
+            isCheckoutEntered = true
             shelfAnchor.notifications.checkOut.post()
             arView.scene.anchors.append(checkoutAnchor)
-            arView.scene.anchors.remove(shelfAnchor)
+            //arView.scene.anchors.remove(shelfAnchor)
+            cameraAnchor.removeChild(cart)
+            arView.scene.removeAnchor(cameraAnchor)
         }
         
         sceneIndex += 1
@@ -177,7 +183,7 @@ class ViewController: UIViewController, ARSessionDelegate {
         pizza = shelfAnchor.findEntity(named: "pizza1")
         cookie = shelfAnchor.findEntity(named: "cookie1")
         
-        
+        waterMellonCheckout = checkoutAnchor.findEntity(named: "watermellon2")
         
         cameraAnchor.addChild(cart)
         
@@ -359,18 +365,9 @@ class ViewController: UIViewController, ARSessionDelegate {
         let yPosC = abs((projectedCookie?.y ?? 0) / (1792 / 2))
         //print("watermellon coord x: \(xPos), y: \(yPos)")
         
-        if isWatermellonAdded && isCheckoutEntered && !showWatermellon{
-            showWatermellon = true
-            checkoutAnchor.notifications.watermellonShow.post()
-        }
-        if isPizzaAdded && isCheckoutEntered && !showPizza{
-            showPizza = true;
-            checkoutAnchor.notifications.pizzaShow.post()
-        }
-        if isCookieAdded && isCheckoutEntered && !showCookie{
-            showCookie = true;
-            checkoutAnchor.notifications.cookieShow.post()
-        }
+        
+        
+        
         
         let handler = VNImageRequestHandler(cvPixelBuffer: frame.capturedImage, orientation: .up, options: [:])
         do {
@@ -415,22 +412,22 @@ class ViewController: UIViewController, ARSessionDelegate {
             
 
             print("difference watermellon: \(diffMiddleW)")
-            print("difference pizza: \(diffMiddleP)")
-            print("difference cookie: \(diffMiddleC)")
+            //print("difference pizza: \(diffMiddleP)")
+            //print("difference cookie: \(diffMiddleC)")
             
-            if (diffMiddleW < 0.4) && !isWatermellonAdded && isShopEntered && !isCheckoutEntered{
+            if (diffMiddleW < 0.5) && !isWatermellonAdded && isShopEntered && !isCheckoutEntered{
                 //print("condition met")
                 isWatermellonAdded = true
                 shelfAnchor.notifications.hideWaterMellon.post()
                 cameraAnchor.addChild(waterMellon)
                 waterMellon.transform.translation = [0, -0.3, -2]
-            } else if (diffMiddleP < 0.4) && !isPizzaAdded && isShopEntered && !isCheckoutEntered{
+            } else if (diffMiddleP < 0.5) && !isPizzaAdded && isShopEntered && !isCheckoutEntered{
                 //print("condition met")
                 isPizzaAdded = true
                 shelfAnchor.notifications.hidePizza.post()
                 cameraAnchor.addChild(pizza)
                 pizza.transform.translation = [0, -0.3, -1.8]
-            } else if (diffMiddleC < 0.4) && !isCookieAdded && isShopEntered && !isCheckoutEntered{
+            } else if (diffMiddleC < 0.5) && !isCookieAdded && isShopEntered && !isCheckoutEntered{
                 //print("condition met")
                 isCookieAdded = true
                 shelfAnchor.notifications.hideCookie.post()
@@ -439,7 +436,21 @@ class ViewController: UIViewController, ARSessionDelegate {
             }
             
             
-            
+            if isWatermellonAdded && isCheckoutEntered && !showWatermellon{
+                showWatermellon = true
+                checkoutAnchor.notifications.watermellonShow.post()
+                
+            }
+            if isPizzaAdded && isCheckoutEntered && !showPizza{
+                showPizza = true;
+                checkoutAnchor.notifications.pizzaShow.post()
+                
+            }
+            if isCookieAdded && isCheckoutEntered && !showCookie{
+                showCookie = true;
+                checkoutAnchor.notifications.cookieShow.post()
+                
+            }
             
             
             
