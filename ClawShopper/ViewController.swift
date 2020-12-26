@@ -25,10 +25,16 @@ class ViewController: UIViewController, ARSessionDelegate {
     
     
     var isShopEntered: Bool!
+    var isCheckoutEntered = false
     
     var entryAnchor: Supermarket.Enter!
     var shelfAnchor: Supermarket.Scene!
     var checkoutAnchor: Supermarket.CheckOut!
+    
+    var showWatermellon = false
+    var showPizza = false
+    var showCookie = false;
+    
 
     
     var cart: Entity!
@@ -353,7 +359,18 @@ class ViewController: UIViewController, ARSessionDelegate {
         let yPosC = abs((projectedCookie?.y ?? 0) / (1792 / 2))
         //print("watermellon coord x: \(xPos), y: \(yPos)")
         
-        
+        if isWatermellonAdded && isCheckoutEntered && !showWatermellon{
+            showWatermellon = true
+            checkoutAnchor.notifications.watermellonShow.post()
+        }
+        if isPizzaAdded && isCheckoutEntered && !showPizza{
+            showPizza = true;
+            checkoutAnchor.notifications.pizzaShow.post()
+        }
+        if isCookieAdded && isCheckoutEntered && !showCookie{
+            showCookie = true;
+            checkoutAnchor.notifications.cookieShow.post()
+        }
         
         let handler = VNImageRequestHandler(cvPixelBuffer: frame.capturedImage, orientation: .up, options: [:])
         do {
@@ -401,25 +418,27 @@ class ViewController: UIViewController, ARSessionDelegate {
             print("difference pizza: \(diffMiddleP)")
             print("difference cookie: \(diffMiddleC)")
             
-            if (diffMiddleW < 0.4) && !isWatermellonAdded && isShopEntered {
+            if (diffMiddleW < 0.4) && !isWatermellonAdded && isShopEntered && !isCheckoutEntered{
                 //print("condition met")
                 isWatermellonAdded = true
                 shelfAnchor.notifications.hideWaterMellon.post()
                 cameraAnchor.addChild(waterMellon)
                 waterMellon.transform.translation = [0, -0.3, -2]
-            } else if (diffMiddleP < 0.4) && !isPizzaAdded && isShopEntered {
+            } else if (diffMiddleP < 0.4) && !isPizzaAdded && isShopEntered && !isCheckoutEntered{
                 //print("condition met")
                 isPizzaAdded = true
                 shelfAnchor.notifications.hidePizza.post()
                 cameraAnchor.addChild(pizza)
                 pizza.transform.translation = [0, -0.3, -1.8]
-            } else if (diffMiddleC < 0.4) && !isCookieAdded && isShopEntered {
+            } else if (diffMiddleC < 0.4) && !isCookieAdded && isShopEntered && !isCheckoutEntered{
                 //print("condition met")
                 isCookieAdded = true
                 shelfAnchor.notifications.hideCookie.post()
                 cameraAnchor.addChild(cookie)
                 cookie.transform.translation = [0, -0.3, -1.6]
             }
+            
+            
             
             
             
