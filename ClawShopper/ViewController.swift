@@ -18,16 +18,27 @@ class ViewController: UIViewController, ARSessionDelegate {
     @IBOutlet var arView: ARView!
     
     var isWatermellonAdded: Bool!
+    var isPizzaAdded: Bool!
+    var isCookieAdded: Bool!
+    
+    
     var isShopEntered: Bool!
     
     var entryAnchor: Supermarket.Enter!
     var shelfAnchor: Supermarket.Scene!
+
     
     var cart: Entity!
     var cartPosition: SIMD3<Float>?
     
     var waterMellon: Entity!
     var waterMellonPosition: SIMD3<Float>!
+    
+    var pizza: Entity!
+    var pizzaPosition: SIMD3<Float>!
+    
+    var cookie: Entity!
+    var cookiePosition: SIMD3<Float>!
     
     let cameraAnchor = AnchorEntity(.camera)
     //var pubnub: PubNub!
@@ -97,6 +108,9 @@ class ViewController: UIViewController, ARSessionDelegate {
         super.viewDidLoad()
         
         isWatermellonAdded = false
+        isPizzaAdded = false
+        isCookieAdded = false
+        
         isShopEntered = false
         //instantiation for pubnub API
 //        listener.didReceiveMessage = { message in
@@ -141,8 +155,9 @@ class ViewController: UIViewController, ARSessionDelegate {
         
         cart = shelfAnchor.findEntity(named: "cart")
         waterMellon = shelfAnchor.findEntity(named: "watermellon1")
+        pizza = shelfAnchor.findEntity(named: "pizza1")
+        cookie = shelfAnchor.findEntity(named: "cookie1")
         
-        //let cameraAnchor = AnchorEntity(.camera)
         
         
         cameraAnchor.addChild(cart)
@@ -298,10 +313,31 @@ class ViewController: UIViewController, ARSessionDelegate {
             waterMellon.position.z
         )
         
-        let projectedPoint = arView.project(waterMellonPosition)
-        let xPos = abs((projectedPoint?.x ?? 0) / 828)
-        let yPos = abs((projectedPoint?.y ?? 0) / (1792 / 2))
+        pizzaPosition = SIMD3<Float>(
+            pizza.position.x,
+            pizza.position.y,
+            pizza.position.z
+        )
         
+        cookiePosition = SIMD3<Float>(
+            cookie.position.x,
+            cookie.position.y,
+            cookie.position.z
+        )
+        
+        let projectedWatermellon = arView.project(waterMellonPosition)
+        let projectedPizza = arView.project(pizzaPosition)
+        let projectedCookie = arView.project(cookiePosition)
+        
+        
+        let xPosW = abs((projectedWatermellon?.x ?? 0) / 828)
+        let yPosW = abs((projectedWatermellon?.y ?? 0) / (1792 / 2))
+        
+        let xPosP = abs((projectedPizza?.x ?? 0) / 828)
+        let yPosP = abs((projectedPizza?.y ?? 0) / (1792 / 2))
+        
+        let xPosC = abs((projectedCookie?.x ?? 0) / 828)
+        let yPosC = abs((projectedCookie?.y ?? 0) / (1792 / 2))
         //print("watermellon coord x: \(xPos), y: \(yPos)")
         
         
@@ -335,45 +371,42 @@ class ViewController: UIViewController, ARSessionDelegate {
             indexTip = CGPoint(x: indexTipPoint.location.x, y: 1 - indexTipPoint.location.y)
             ringTip = CGPoint(x: ringTipPoint.location.x, y: 1 - ringTipPoint.location.y)
             
-            let diffXMiddle = abs(xPos - middleTipPoint.location.x)
-            let diffYMiddle = abs(yPos - middleTipPoint.location.y)
+            let diffXMiddleW = abs(xPosW - middleTipPoint.location.x)
+            let diffYMiddleW = abs(yPosW - middleTipPoint.location.y)
+            let diffMiddleW = diffXMiddleW + diffYMiddleW
             
-            let diffMiddle = diffXMiddle + diffYMiddle
+            let diffXMiddleP = abs(xPosP - middleTipPoint.location.x)
+            let diffYMiddleP = abs(yPosP - middleTipPoint.location.y)
+            let diffMiddleP = diffXMiddleP + diffYMiddleP
             
-//            let diffMiddle = (pow(xPos - middleTipPoint.location.x, 2) + pow(yPos - (1 - middleTipPoint.location.y), 2)).squareRoot()
+            let diffXMiddleC = abs(xPosC - middleTipPoint.location.x)
+            let diffYMiddleC = abs(yPosC - middleTipPoint.location.y)
+            let diffMiddleC = diffXMiddleC + diffYMiddleC
             
-            //print("middle finger x: \(middleTipPoint.location.x) y: \(middleTipPoint.location.y)")
-            print("difference middle: \(diffMiddle)")
+
+            print("difference middle: \(diffMiddleW)")
             
-            if (diffMiddle < 0.4) && !isWatermellonAdded && isShopEntered {
-                print("condition met")
+            if (diffMiddleW < 0.4) && !isWatermellonAdded && isShopEntered {
+                //print("condition met")
                 isWatermellonAdded = true
                 shelfAnchor.notifications.hideWaterMellon.post()
                 cameraAnchor.addChild(waterMellon)
                 waterMellon.transform.translation = [0, -0.3, -2]
+            } else if (diffMiddleP < 0.4) && !isPizzaAdded && isShopEntered {
+                //print("condition met")
+                isPizzaAdded = true
+                shelfAnchor.notifications.hidePizza.post()
+                cameraAnchor.addChild(pizza)
+                pizza.transform.translation = [0, -0.3, -1.8]
+            } else if (diffMiddleC < 0.4) && !isCookieAdded && isShopEntered {
+                //print("condition met")
+                isCookieAdded = true
+                shelfAnchor.notifications.hideCookie.post()
+                cameraAnchor.addChild(cookie)
+                cookie.transform.translation = [0, -0.3, -1.6]
             }
             
             
-//            let cameraCoord = frame.camera.transform
-//
-//            let cameraPosition = SCNVector3(
-//                cameraCoord.columns.3.x,
-//                cameraCoord.columns.3.y,
-//                cameraCoord.columns.3.z
-//            )
-//
-            
-//            cartPosition = cart.position
-//
-//            print("camera position: \(cameraPosition)")
-//
-//
-//
-//            print("cart position: \(cartPosition!)")
-            
-            
-            
-
             
             
         } catch {
