@@ -17,11 +17,18 @@ class ViewController: UIViewController, ARSessionDelegate, UNUserNotificationCen
     
     let db = Firestore.firestore()
     
+    var MostPurchasedItem = -1
+    
+    
     var configuration = ARWorldTrackingConfiguration()
     
     var sceneIndex = 1
     
     @IBOutlet var arView: ARView!
+    
+    var watermellonPurchased = 0
+    var pizzaPurchased = 0
+    var cookiePurchased = 0
     
     var isWatermellonAdded: Bool!
     var isPizzaAdded: Bool!
@@ -39,7 +46,10 @@ class ViewController: UIViewController, ARSessionDelegate, UNUserNotificationCen
     var showPizza = false
     var showCookie = false;
     
-
+    
+    var watermelonSign: Entity!
+    var pizzaSign: Entity!
+    var cookieSign: Entity!
     
     var cart: Entity!
     var checkOutSign: Entity!
@@ -118,6 +128,7 @@ class ViewController: UIViewController, ARSessionDelegate, UNUserNotificationCen
             cameraAnchor.removeChild(cart)
             cameraAnchor.removeChild(checkOutSign)
             arView.scene.removeAnchor(cameraAnchor)
+            addToCart()
         }
         
         sceneIndex += 1
@@ -134,9 +145,9 @@ class ViewController: UIViewController, ARSessionDelegate, UNUserNotificationCen
     func addToCart() {
         var ref: DocumentReference? = nil
         ref = db.collection("orders").addDocument(data: [
-            "first": "Ada",
-            "last": "Lovelace",
-            "born": 1815
+            "watermellon": isWatermellonAdded ? 1 : 0,
+            "pizza": isPizzaAdded ? 1 : 0,
+            "cookie": isCookieAdded ? 1 : 0
         ]) { err in
             if let err = err {
                 print("Error adding document: \(err)")
@@ -144,18 +155,45 @@ class ViewController: UIViewController, ARSessionDelegate, UNUserNotificationCen
                 print("Document added with ID: \(ref!.documentID)")
             }
         }
-        
-        ref = db.collection("orders").addDocument(data: [
-            "first": "Alan",
-            "middle": "Mathison",
-            "last": "Turing",
-            "born": 1912
-        ]) { err in
+    }
+    
+    func readCart() {
+        db.collection("orders").getDocuments() { [self] (querySnapshot, err) in
             if let err = err {
-                print("Error adding document: \(err)")
+                print("Error getting documents: \(err)")
             } else {
-                print("Document added with ID: \(ref!.documentID)")
+                for document in querySnapshot!.documents {
+                    print("\(document.documentID) => \(document.data())")
+                    let isWatermellonLastTime = document.data()["watermellon"]
+                    let isPizzaPurchasedLastTime = document.data()["pizza"]
+                    let isCookiePurchasedLastTime = document.data()["cookie"]
+                    
+                    self.watermellonPurchased += isWatermellonLastTime! as! Int
+                    self.pizzaPurchased += isPizzaPurchasedLastTime! as! Int
+                    self.cookiePurchased += isCookiePurchasedLastTime! as! Int
+                    
+                }
             }
+            MostPurchasedItem = [watermellonPurchased, pizzaPurchased, cookiePurchased].max()!
+            
+            //print("max item purchased: \(MostPurchasedItem)")
+            switch self.MostPurchasedItem {
+            case 0:
+                watermelonSign = self.shelfAnchor.findEntity(named: "watermelonSign")
+                self.cameraAnchor.addChild(watermelonSign)
+                self.watermelonSign.transform.translation = [-0.3, 0.8, -3.5]
+            case 1:
+                pizzaSign = shelfAnchor.findEntity(named: "pizzaSign")
+                self.cameraAnchor.addChild(self.pizzaSign)
+                self.pizzaSign.transform.translation = [-0.3, 0.8, -3.5]
+            case 2:
+                cookieSign = shelfAnchor.findEntity(named: "cookieSign")
+                self.cameraAnchor.addChild(cookieSign)
+                self.cookieSign.transform.translation = [-0.5, 0.8, -3.5]
+            default:
+                print("error")
+            }
+            checkOutSign.transform.translation = [0.3, 0.8, -3.5]
         }
     }
     
@@ -216,6 +254,16 @@ class ViewController: UIViewController, ARSessionDelegate, UNUserNotificationCen
         
         arView.scene.anchors.append(shelfAnchor)
         
+        readCart()
+        
+        let purchaseRecord = [watermellonPurchased, pizzaPurchased, cookiePurchased]
+        let mostPurchased = purchaseRecord.max()
+        
+        //print(mostPurchased!)
+        
+        MostPurchasedItem = purchaseRecord.firstIndex(of: mostPurchased!) ?? -1
+        
+        
         cart = shelfAnchor.findEntity(named: "cart")
         waterMellon = shelfAnchor.findEntity(named: "watermellon1")
         pizza = shelfAnchor.findEntity(named: "pizza1")
@@ -226,10 +274,16 @@ class ViewController: UIViewController, ARSessionDelegate, UNUserNotificationCen
         cameraAnchor.addChild(cart)
         cameraAnchor.addChild(checkOutSign)
         
+        
+        
+        
+        
         arView.scene.addAnchor(cameraAnchor)
         
         cart.transform.translation = [0, -1, -2]
-        checkOutSign.transform.translation = [0.3, 0.8, -3.5]
+        
+        
+        
         
     }
 
@@ -461,6 +515,7 @@ class ViewController: UIViewController, ARSessionDelegate, UNUserNotificationCen
                 shelfAnchor.notifications.hideWaterMellon.post()
                 cameraAnchor.addChild(waterMellon)
                 waterMellon.transform.translation = [0, -0.3, -2]
+                
             } else if (diffMiddleP < 0.4) && !isPizzaAdded && isShopEntered && !isCheckoutEntered{
                 //print("condition met")
                 isPizzaAdded = true
