@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4B0D797C2595809700DB7C73 /* supermarket.rcproject in Sources */ = {isa = PBXBuildFile; fileRef = 4B0D797B2595809600DB7C73 /* supermarket.rcproject */; };
+		4B8F27892597FF4200E46472 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4B8F27882597FF4200E46472 /* GoogleService-Info.plist */; };
 		4BBA9EFC2593DE8800D61F73 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBA9EFB2593DE8800D61F73 /* AppDelegate.swift */; };
 		4BBA9EFE2593DE8800D61F73 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBA9EFD2593DE8800D61F73 /* ViewController.swift */; };
 		4BBA9F032593DE8800D61F73 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4BBA9F012593DE8800D61F73 /* Main.storyboard */; };
@@ -15,10 +16,12 @@
 		4BBA9F082593DE8900D61F73 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4BBA9F062593DE8900D61F73 /* LaunchScreen.storyboard */; };
 		4BBA9F172593E28000D61F73 /* HandGestureProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBA9F162593E28000D61F73 /* HandGestureProcessor.swift */; };
 		4BBA9F1A2593E2DE00D61F73 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBA9F192593E2DE00D61F73 /* CameraView.swift */; };
+		BC442DC86AD027796FBAE053 /* Pods_ClawShopper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CDD21C4BB5459455B363583 /* Pods_ClawShopper.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		4B0D797B2595809600DB7C73 /* supermarket.rcproject */ = {isa = PBXFileReference; lastKnownFileType = file.rcproject; path = supermarket.rcproject; sourceTree = "<group>"; };
+		4B8F27882597FF4200E46472 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4BBA9EF82593DE8800D61F73 /* ClawShopper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClawShopper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BBA9EFB2593DE8800D61F73 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4BBA9EFD2593DE8800D61F73 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -29,6 +32,9 @@
 		4BBA9F162593E28000D61F73 /* HandGestureProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandGestureProcessor.swift; sourceTree = "<group>"; };
 		4BBA9F192593E2DE00D61F73 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		4BBA9F1E2593ED5400D61F73 /* HandPose.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HandPose.entitlements; sourceTree = "<group>"; };
+		5CDD21C4BB5459455B363583 /* Pods_ClawShopper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClawShopper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B7A3E227B3C9A0BF1575AFB1 /* Pods-ClawShopper.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClawShopper.release.xcconfig"; path = "Target Support Files/Pods-ClawShopper/Pods-ClawShopper.release.xcconfig"; sourceTree = "<group>"; };
+		F2188E64F58FE94480AC6186 /* Pods-ClawShopper.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClawShopper.debug.xcconfig"; path = "Target Support Files/Pods-ClawShopper/Pods-ClawShopper.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -36,6 +42,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BC442DC86AD027796FBAE053 /* Pods_ClawShopper.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -47,6 +54,8 @@
 			children = (
 				4BBA9EFA2593DE8800D61F73 /* ClawShopper */,
 				4BBA9EF92593DE8800D61F73 /* Products */,
+				DABFCA613CC3A7378AE33583 /* Pods */,
+				57DC03D84EA4FD8F74D42B9A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -68,11 +77,30 @@
 				4BBA9F042593DE8900D61F73 /* Assets.xcassets */,
 				4BBA9F062593DE8900D61F73 /* LaunchScreen.storyboard */,
 				4BBA9F092593DE8900D61F73 /* Info.plist */,
+				4B8F27882597FF4200E46472 /* GoogleService-Info.plist */,
 				4BBA9F1E2593ED5400D61F73 /* HandPose.entitlements */,
 				4BBA9F162593E28000D61F73 /* HandGestureProcessor.swift */,
 				4BBA9F192593E2DE00D61F73 /* CameraView.swift */,
 			);
 			path = ClawShopper;
+			sourceTree = "<group>";
+		};
+		57DC03D84EA4FD8F74D42B9A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5CDD21C4BB5459455B363583 /* Pods_ClawShopper.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DABFCA613CC3A7378AE33583 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				F2188E64F58FE94480AC6186 /* Pods-ClawShopper.debug.xcconfig */,
+				B7A3E227B3C9A0BF1575AFB1 /* Pods-ClawShopper.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -82,9 +110,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4BBA9F0C2593DE8900D61F73 /* Build configuration list for PBXNativeTarget "ClawShopper" */;
 			buildPhases = (
+				ED749C44C93142442AB4E0B6 /* [CP] Check Pods Manifest.lock */,
 				4BBA9EF42593DE8800D61F73 /* Sources */,
 				4BBA9EF52593DE8800D61F73 /* Frameworks */,
 				4BBA9EF62593DE8800D61F73 /* Resources */,
+				722417786073285E72F44BC1 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -133,12 +163,55 @@
 			buildActionMask = 2147483647;
 			files = (
 				4BBA9F082593DE8900D61F73 /* LaunchScreen.storyboard in Resources */,
+				4B8F27892597FF4200E46472 /* GoogleService-Info.plist in Resources */,
 				4BBA9F052593DE8900D61F73 /* Assets.xcassets in Resources */,
 				4BBA9F032593DE8800D61F73 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		722417786073285E72F44BC1 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ClawShopper/Pods-ClawShopper-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ClawShopper/Pods-ClawShopper-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ClawShopper/Pods-ClawShopper-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		ED749C44C93142442AB4E0B6 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ClawShopper-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4BBA9EF42593DE8800D61F73 /* Sources */ = {
@@ -293,6 +366,7 @@
 		};
 		4BBA9F0D2593DE8900D61F73 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F2188E64F58FE94480AC6186 /* Pods-ClawShopper.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -312,6 +386,7 @@
 		};
 		4BBA9F0E2593DE8900D61F73 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B7A3E227B3C9A0BF1575AFB1 /* Pods-ClawShopper.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

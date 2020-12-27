@@ -7,12 +7,16 @@
 
 import UIKit
 import RealityKit
-//import AVFoundation
 import Vision
 import ARKit
 import SceneKit
+import Firebase
 
-class ViewController: UIViewController, ARSessionDelegate {
+
+class ViewController: UIViewController, ARSessionDelegate, UNUserNotificationCenterDelegate {
+    
+    let db = Firestore.firestore()
+    
     var configuration = ARWorldTrackingConfiguration()
     
     var sceneIndex = 1
@@ -27,7 +31,7 @@ class ViewController: UIViewController, ARSessionDelegate {
     var isShopEntered: Bool!
     var isCheckoutEntered = false
     
-    var entryAnchor: Supermarket.Enter!
+    //var entryAnchor: Supermarket.Enter!
     var shelfAnchor: Supermarket.Scene!
     var checkoutAnchor: Supermarket.CheckOut!
     
@@ -38,7 +42,8 @@ class ViewController: UIViewController, ARSessionDelegate {
 
     
     var cart: Entity!
-    var cartPosition: SIMD3<Float>?
+    var checkOutSign: Entity!
+    
     
     var waterMellon: Entity!
     var waterMellonPosition: SIMD3<Float>!
@@ -64,8 +69,8 @@ class ViewController: UIViewController, ARSessionDelegate {
     //private var cameraFeedSession: AVCaptureSession?
     private var handPoseRequest = VNDetectHumanHandPoseRequest()
     
-    private let drawOverlay = CAShapeLayer()
-    private let drawPath = UIBezierPath()
+    
+    
     private var evidenceBuffer = [HandGestureProcessor.PointsPair]()
     private var lastDrawPoint: CGPoint?
     private var isFirstSegment = true
@@ -105,15 +110,13 @@ class ViewController: UIViewController, ARSessionDelegate {
     func handleTap(recognizer: UITapGestureRecognizer) {
         if sceneIndex == 1 {
             isShopEntered = true
-            entryAnchor.notifications.switchScene.post()
-            arView.scene.anchors.append(shelfAnchor)
-            //arView.scene.anchors.remove(entryAnchor)
         } else if sceneIndex == 2 {
             isCheckoutEntered = true
             shelfAnchor.notifications.checkOut.post()
             arView.scene.anchors.append(checkoutAnchor)
             //arView.scene.anchors.remove(shelfAnchor)
             cameraAnchor.removeChild(cart)
+            cameraAnchor.removeChild(checkOutSign)
             arView.scene.removeAnchor(cameraAnchor)
         }
         
@@ -128,8 +131,39 @@ class ViewController: UIViewController, ARSessionDelegate {
         //arView.session.run(configuration)
     }
     
+    func addToCart() {
+        var ref: DocumentReference? = nil
+        ref = db.collection("orders").addDocument(data: [
+            "first": "Ada",
+            "last": "Lovelace",
+            "born": 1815
+        ]) { err in
+            if let err = err {
+                print("Error adding document: \(err)")
+            } else {
+                print("Document added with ID: \(ref!.documentID)")
+            }
+        }
+        
+        ref = db.collection("orders").addDocument(data: [
+            "first": "Alan",
+            "middle": "Mathison",
+            "last": "Turing",
+            "born": 1912
+        ]) { err in
+            if let err = err {
+                print("Error adding document: \(err)")
+            } else {
+                print("Document added with ID: \(ref!.documentID)")
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+
+    
         
         isWatermellonAdded = false
         isPizzaAdded = false
@@ -160,6 +194,10 @@ class ViewController: UIViewController, ARSessionDelegate {
 //        }
         
         
+        
+        
+        
+        
         handPoseRequest.maximumHandCount = 1
         // Add state change handler to hand gesture processor.
         gestureProcessor.didChangeStateClosure = { [weak self] state in
@@ -172,24 +210,26 @@ class ViewController: UIViewController, ARSessionDelegate {
         arView.addGestureRecognizer(recognizer)
         
         // Load the "Box" scene from the "Experience" Reality File
-        entryAnchor = try! Supermarket.loadEnter()
+        //entryAnchor = try! Supermarket.loadEnter()
         shelfAnchor = try! Supermarket.loadScene()
         checkoutAnchor = try! Supermarket.loadCheckOut()
         
-        arView.scene.anchors.append(entryAnchor)
+        arView.scene.anchors.append(shelfAnchor)
         
         cart = shelfAnchor.findEntity(named: "cart")
         waterMellon = shelfAnchor.findEntity(named: "watermellon1")
         pizza = shelfAnchor.findEntity(named: "pizza1")
         cookie = shelfAnchor.findEntity(named: "cookie1")
-        
+        checkOutSign = shelfAnchor.findEntity(named: "checkoutSign")
         waterMellonCheckout = checkoutAnchor.findEntity(named: "watermellon2")
         
         cameraAnchor.addChild(cart)
+        cameraAnchor.addChild(checkOutSign)
         
         arView.scene.addAnchor(cameraAnchor)
         
         cart.transform.translation = [0, -1, -2]
+        checkOutSign.transform.translation = [0.3, 0.8, -3.5]
         
     }
 
@@ -350,6 +390,9 @@ class ViewController: UIViewController, ARSessionDelegate {
             cookie.position.z
         )
         
+        
+        
+        
         let projectedWatermellon = arView.project(waterMellonPosition)
         let projectedPizza = arView.project(pizzaPosition)
         let projectedCookie = arView.project(cookiePosition)
@@ -391,9 +434,6 @@ class ViewController: UIViewController, ARSessionDelegate {
             //print("middle finger y coord: \(1 - middleTipPoint.location.y)")
             
             
-            
-            
-            
             middleTip = CGPoint(x: middleTipPoint.location.x, y: 1 - middleTipPoint.location.y)
             indexTip = CGPoint(x: indexTipPoint.location.x, y: 1 - indexTipPoint.location.y)
             ringTip = CGPoint(x: ringTipPoint.location.x, y: 1 - ringTipPoint.location.y)
@@ -411,7 +451,7 @@ class ViewController: UIViewController, ARSessionDelegate {
             let diffMiddleC = diffXMiddleC + diffYMiddleC
             
 
-            print("difference watermellon: \(diffMiddleW)")
+            print("difference watermellon: \(diffMiddleC)")
             //print("difference pizza: \(diffMiddleP)")
             //print("difference cookie: \(diffMiddleC)")
             
@@ -421,13 +461,13 @@ class ViewController: UIViewController, ARSessionDelegate {
                 shelfAnchor.notifications.hideWaterMellon.post()
                 cameraAnchor.addChild(waterMellon)
                 waterMellon.transform.translation = [0, -0.3, -2]
-            } else if (diffMiddleP < 0.5) && !isPizzaAdded && isShopEntered && !isCheckoutEntered{
+            } else if (diffMiddleP < 0.4) && !isPizzaAdded && isShopEntered && !isCheckoutEntered{
                 //print("condition met")
                 isPizzaAdded = true
                 shelfAnchor.notifications.hidePizza.post()
                 cameraAnchor.addChild(pizza)
                 pizza.transform.translation = [0, -0.3, -1.8]
-            } else if (diffMiddleC < 0.5) && !isCookieAdded && isShopEntered && !isCheckoutEntered{
+            } else if (diffMiddleC < 0.4) && !isCookieAdded && isShopEntered && !isCheckoutEntered{
                 //print("condition met")
                 isCookieAdded = true
                 shelfAnchor.notifications.hideCookie.post()
