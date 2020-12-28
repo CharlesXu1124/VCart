@@ -176,9 +176,10 @@ class ViewController: UIViewController, ARSessionDelegate, UNUserNotificationCen
             }
             MostPurchasedItem = [watermellonPurchased, pizzaPurchased, cookiePurchased].max()!
             
-            //print("max item purchased: \(MostPurchasedItem)")
-            switch self.MostPurchasedItem {
+            let purchasedMostIndex = [watermellonPurchased, pizzaPurchased, cookiePurchased].firstIndex(of: MostPurchasedItem)
+            switch purchasedMostIndex {
             case 0:
+                print("condition called")
                 watermelonSign = self.shelfAnchor.findEntity(named: "watermelonSign")
                 self.cameraAnchor.addChild(watermelonSign)
                 self.watermelonSign.transform.translation = [-0.3, 0.8, -3.5]

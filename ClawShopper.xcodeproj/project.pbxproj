@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4B0D797C2595809700DB7C73 /* supermarket.rcproject in Sources */ = {isa = PBXBuildFile; fileRef = 4B0D797B2595809600DB7C73 /* supermarket.rcproject */; };
+		4B8B345F25983BCA00D3697A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4B8B345E25983BCA00D3697A /* GoogleService-Info.plist */; };
 		4BBA9EFC2593DE8800D61F73 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBA9EFB2593DE8800D61F73 /* AppDelegate.swift */; };
 		4BBA9EFE2593DE8800D61F73 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBA9EFD2593DE8800D61F73 /* ViewController.swift */; };
 		4BBA9F032593DE8800D61F73 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4BBA9F012593DE8800D61F73 /* Main.storyboard */; };
@@ -20,6 +21,7 @@
 
 /* Begin PBXFileReference section */
 		4B0D797B2595809600DB7C73 /* supermarket.rcproject */ = {isa = PBXFileReference; lastKnownFileType = file.rcproject; path = supermarket.rcproject; sourceTree = "<group>"; };
+		4B8B345E25983BCA00D3697A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4BBA9EF82593DE8800D61F73 /* ClawShopper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClawShopper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BBA9EFB2593DE8800D61F73 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4BBA9EFD2593DE8800D61F73 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -75,6 +77,7 @@
 				4BBA9F042593DE8900D61F73 /* Assets.xcassets */,
 				4BBA9F062593DE8900D61F73 /* LaunchScreen.storyboard */,
 				4BBA9F092593DE8900D61F73 /* Info.plist */,
+				4B8B345E25983BCA00D3697A /* GoogleService-Info.plist */,
 				4BBA9F1E2593ED5400D61F73 /* HandPose.entitlements */,
 				4BBA9F162593E28000D61F73 /* HandGestureProcessor.swift */,
 				4BBA9F192593E2DE00D61F73 /* CameraView.swift */,
@@ -159,6 +162,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4BBA9F082593DE8900D61F73 /* LaunchScreen.storyboard in Resources */,
+				4B8B345F25983BCA00D3697A /* GoogleService-Info.plist in Resources */,
 				4BBA9F052593DE8900D61F73 /* Assets.xcassets in Resources */,
 				4BBA9F032593DE8800D61F73 /* Main.storyboard in Resources */,
 			);
